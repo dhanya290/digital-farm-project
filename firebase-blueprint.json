@@ -1,0 +1,138 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "staff"] },
+        "farmId": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Farm": {
+      "title": "Farm",
+      "description": "Farm details",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["pig", "poultry"] },
+        "location": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "stats": { "type": "object" }
+      },
+      "required": ["name", "type", "ownerId"]
+    },
+    "BiosecurityRecord": {
+      "title": "BiosecurityRecord",
+      "description": "Logs for biosecurity activities",
+      "type": "object",
+      "properties": {
+        "farmId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "type": { "type": "string", "enum": ["visitor", "vehicle", "sanitation", "disease_check"] },
+        "details": { "type": "object" },
+        "status": { "type": "string", "enum": ["pass", "fail", "pending"] },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["farmId", "date", "type", "status", "recordedBy"]
+    },
+    "Alert": {
+      "title": "Alert",
+      "description": "Biosecurity alerts",
+      "type": "object",
+      "properties": {
+        "farmId": { "type": "string" },
+        "message": { "type": "string" },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "date": { "type": "string", "format": "date-time" },
+        "resolved": { "type": "boolean" }
+      },
+      "required": ["farmId", "message", "severity", "date", "resolved"]
+    },
+    "Animal": {
+      "title": "Animal",
+      "description": "Livestock record",
+      "type": "object",
+      "properties": {
+        "farmId": { "type": "string" },
+        "type": { "type": "string", "enum": ["Pig", "Poultry"] },
+        "breed": { "type": "string" },
+        "age": { "type": "number" },
+        "healthStatus": { "type": "string", "enum": ["Healthy", "Sick", "Quarantined"] }
+      },
+      "required": ["farmId", "type", "breed", "age", "healthStatus"]
+    },
+    "Vaccination": {
+      "title": "Vaccination",
+      "description": "Vaccination record",
+      "type": "object",
+      "properties": {
+        "animalId": { "type": "string" },
+        "vaccineName": { "type": "string" },
+        "dateAdministered": { "type": "string", "format": "date" },
+        "nextDueDate": { "type": "string", "format": "date" },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["animalId", "vaccineName", "dateAdministered", "recordedBy"]
+    },
+    "Visitor": {
+      "title": "Visitor",
+      "description": "Visitor log",
+      "type": "object",
+      "properties": {
+        "farmId": { "type": "string" },
+        "name": { "type": "string" },
+        "purpose": { "type": "string" },
+        "entryTime": { "type": "string", "format": "date-time" },
+        "exitTime": { "type": "string", "format": "date-time" },
+        "protectiveGear": { "type": "boolean" },
+        "recordedBy": { "type": "string" }
+      },
+      "required": ["farmId", "name", "purpose", "entryTime", "protectiveGear", "recordedBy"]
+    },
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "Farm supplies and stock",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["Feed", "Medicine", "Sanitation", "Equipment"] },
+        "quantity": { "type": "number" },
+        "unit": { "type": "string" },
+        "minThreshold": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "category", "quantity", "unit", "minThreshold", "lastUpdated"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Farm tasks and assignments",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "assignedTo": { "type": "string" },
+        "dueDate": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["Pending", "In Progress", "Completed"] },
+        "priority": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "assignedTo", "dueDate", "status", "priority", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/farms/{farmId}": { "schema": "Farm", "description": "Farm data" },
+    "/records/{recordId}": { "schema": "BiosecurityRecord", "description": "Biosecurity logs" },
+    "/alerts/{alertId}": { "schema": "Alert", "description": "Alerts" },
+    "/animals/{animalId}": { "schema": "Animal", "description": "Livestock" },
+    "/vaccinations/{vaccinationId}": { "schema": "Vaccination", "description": "Vaccinations" },
+    "/visitors/{visitorId}": { "schema": "Visitor", "description": "Visitor logs" },
+    "/inventory/{itemId}": { "schema": "InventoryItem", "description": "Inventory stock" },
+    "/tasks/{taskId}": { "schema": "Task", "description": "Farm tasks" }
+  }
+}
